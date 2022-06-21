@@ -120,38 +120,3 @@ public class AStar {
         list.set(index2, temp);
     }
 }
-/*
-        -Find start location and add it to open
-        -Find end location and save as const
-
-        -Loop {
-            -sort OPEN by f-cost (write quicksort)
-            -CURRENT = OPEN[0]
-            -move CURRENT to CLOSED
-
-            -if (CURRENT.isEND) {
-                -path is found
-            -}
-
-            -Loop over neighboring spaces (remember to catch ArrayIndexOutOfBounds) {
-                -if (NEIGHBOR.isClosed || NEIGHBOR.isWall) {
-                    -Skip
-                -}
-
-                -Calculate path distance to neighbor (add 10 or 14 to gCost if straight or diagonal)
-                -Calculate Δ
-                -Calculate hCost (|Δy-Δx|*10 + 14*smaller(Δx, Δy)) (Δ being between CURRENT and end)
-                -fCost = gCost + hCost
-
-                -if (new path < NEIGHBOR.getGCost || !OPEN.contains(NEIGHBOR)){
-                    -Assign NEIGHBOR newly calculated costs
-                    -NEIGHBOR.setParent(CURRENT)
-                    -if (!OPEN.contains(NEIGHBOR)
-                        -OPEN.add(NEIGHBOR)
-                }
-            }
-        }
-
-        Foreach over CLOSED, OPEN. Reverse through pseudo-linked list starting from end {
-            Closed = red, Open = dark green or green, Path = blue
-        }*/
