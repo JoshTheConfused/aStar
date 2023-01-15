@@ -75,12 +75,69 @@ public class AStar {
         for (BoardPiece space : closed)
             space.setColor(Color.RED);
 
-        BoardPiece currentSpace = end;
-        while (!currentSpace.isStart()) {
-            currentSpace.setColor(Color.BLUE);
-            currentSpace = currentSpace.getParent();
+        BoardPiece[] path = buildPath(end);
+        path = cleanUpPath(path, board);
+
+        for(BoardPiece piece : path){
+            piece.setColor(Color.BLUE);
+        }//Assigns all colors, making a red blob with green edges and a blue path through it
+    }
+
+    private static BoardPiece[] cleanUpPath(BoardPiece[] path, BoardPiece[][] board){
+        int firstPiece = 0;
+        int middlePiece = 1;
+        int secondPiece = 2;
+
+        while (secondPiece < path.length){
+            int realizedDist = (path[secondPiece].getGCost() - path[firstPiece].getGCost()) + (path[middlePiece].getGCost() - path[firstPiece].getGCost());
+            //Calculates the distance the path has traveled between the two points as generated so far
+            if(path[firstPiece].distance(path[secondPiece]) != realizedDist){
+                BoardPiece trueMiddlePiece = findMiddlePiece(path[firstPiece], path[secondPiece], board);
+                if(!trueMiddlePiece.isWall()){
+                    path[middlePiece] = trueMiddlePiece;
+                }
+            }
+
+            firstPiece++;
+            middlePiece++;
+            secondPiece++;
         }
-        start.setColor(Color.BLUE); //Assigns all colors, making a red blob with green edges and a blue path through it
+
+        return path;
+    }
+
+    private static BoardPiece findMiddlePiece(BoardPiece firstPiece, BoardPiece secondPiece, BoardPiece[][] board){
+        //finds the piece in the middle of two others (only works if there is one piece in between)
+        int x, y;
+        if (firstPiece.getX() == secondPiece.getX()){
+            x = firstPiece.getX();
+        }
+        else {
+            x = 1 + Math.min(firstPiece.getX(), secondPiece.getX());
+        }
+        if (firstPiece.getY() == secondPiece.getY()){
+            y = firstPiece.getY();
+        }
+        else {
+            y = 1 + Math.min(firstPiece.getY(), secondPiece.getY());
+        }
+        return board[x][y];
+    }
+
+    private static BoardPiece[] buildPath(BoardPiece endPiece){ //makes an array holding the solved path
+        ArrayList<BoardPiece> path = new ArrayList<>();
+        BoardPiece currentPiece = endPiece;
+        while (!currentPiece.isStart()) {
+            path.add(0,currentPiece);
+            currentPiece = currentPiece.getParent();
+        }
+        path.add(currentPiece);
+
+        BoardPiece[] returnPath = new BoardPiece[path.size()];
+        for (int i = 0; i < returnPath.length; i++){
+            returnPath[i] = path.get(i);
+        }
+        return returnPath;
     }
 
     private static void fCostQuicksort(ArrayList<BoardPiece> list) { //makes quicksort more concise to interact with

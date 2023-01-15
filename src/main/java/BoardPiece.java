@@ -114,6 +114,12 @@ public class BoardPiece {
         this.parent = parent;
     }
 
+    public int distance(BoardPiece target){
+        int xDiff = Math.abs(x - target.getX());
+        int yDiff = Math.abs(y - target.getY());
+        return (Math.abs(xDiff - yDiff) * 10) + (Math.min(xDiff, yDiff) * 14);
+    }
+
     public String toString() {
         String out = "";
         out += "(" + x + ", " + y + "):\n";
